@@ -1,0 +1,16 @@
+express@latest
+@types/express@latest
+nodemon@latest
+chalk@3.0
+dotenv@latest
+@types/dotenv@latest
+jsonwebtoken@latest
+@types/jsonwebtoken@latest
+cors@latest
+@types/cors@latest
+morgan@latest
+@types/morgan@latest
+pg@latest
+@types/pg
+bcryptjs@latest
+@types/bcryptjs

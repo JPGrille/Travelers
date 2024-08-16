@@ -1,0 +1,36 @@
+-- CREATE SCHEMA travelers_db;
+
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS posts (
+    id SERIAL PRIMARY KEY UNIQUE NOT NULL,
+	title VARCHAR(45) NOT NULL,
+	summary TEXT,
+	date TIMESTAMP,
+	img TEXT,
+	created_by INTEGER REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS country (
+    id SERIAL PRIMARY KEY UNIQUE NOT NULL,
+    code CHAR(2) NOT NULL,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS visited_countries (
+    id SERIAL PRIMARY KEY UNIQUE NOT NULL,
+    country_code CHAR(2) NOT NULL,
+    user_id INTEGER REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS likes (
+    id SERIAL PRIMARY KEY UNIQUE NOT NULL,
+    date TIMESTAMP,
+    liked_by INTEGER REFERENCES users(id),
+    post_id INTEGER REFERENCES posts(id)
+);
