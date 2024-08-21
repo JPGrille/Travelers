@@ -12,7 +12,7 @@ interface User {
 export const registerUser = async (user: User) => {
   try {
     const response = await axios.post(`${apiUrl}user/register`, user);
-    return response.data;
+    return response;
   } catch (error) {
     return error;
   }
@@ -22,8 +22,7 @@ export const registerUser = async (user: User) => {
 export const loginUser = async (user: User) => {
   try {
     const response = await axios.post(`${apiUrl}user/login`, user);
-    console.log(response.data);
-    return response.data;
+    return response;
   } catch (error) {
     return error;
   }

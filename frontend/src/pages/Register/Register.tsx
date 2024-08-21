@@ -22,8 +22,8 @@ function Register() {
   const handleSubmit = async () => {
     // Handle form submission
     const submit = await registerUser(user);
-    console.log(submit.message);
-    setSuccess(submit.message);
+    console.log(submit);
+    //setSuccess(submit.message);
   };
 
   return (

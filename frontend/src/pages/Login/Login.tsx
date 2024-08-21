@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../service/index.service";
 
 function Login() {
   const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     username: "",
     email: "",
@@ -19,15 +21,19 @@ function Login() {
     });
   }
   
-  const handleSubmit = async () => {
-    // Handle form submission
-    const submit = await loginUser(user);
-    console.log(submit.message);
-    setSuccess(submit.message);
+  // Handle login form submission
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    const response: any  = await loginUser(user);
+    console.log(response);
+    if (response.status === 200) {
+      navigate("/home", { state: { user: response.data.user } });
+    }
+    //setSuccess(submit.message);
   };
 
   return (
-    <div className="main-container">
+    <div>
       <h1>Login</h1>
 
       <div className="row justify-content-md-center">

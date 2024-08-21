@@ -1,4 +1,4 @@
-# Travel Blog Website
+# Travelers Social Media Website
 
 ## Overview
 This project is a full-stack web application that allows users to register an account, log in, and deliver CRUD operations on the database. It is built using React for the frontend, Node.js and Express for the backend, and PostgreSQL for the database.
@@ -23,6 +23,12 @@ npm install
 3. Set up the database and configure environment variables on the .env file in ../backend/src
 4. Start the backend server
 (`nodemon .\index.js`)
+```
+[nodemon] starting `ts-node index.ts`
+Server is running on http://localhost:4000
+Database connected successfully
+Tables created successfully
+```
 5. Start the frontend server
 (`npm start`)
 
