@@ -50,7 +50,6 @@ code {
   padding: 20px;
   background-color: #f2f2f2;
   border-radius: 5px;
-  text-align: left;
 }
 
 .post-date {
@@ -70,6 +69,22 @@ code {
   align-items: center;
   gap: 2rem;
 }
+
+.postCredit {
+  font-size: 1rem;
+}
+
+.postCredit a, 
+.postCredit a:visited {
+  margin-right: 0.5rem;
+  color: black;
+}
+
+.postCredit a:hover, 
+.postCredit a:focus {
+  color: hsla(0, 0%, 0%, 0.75);
+}
+
 
 @media (max-width: 961px) {
   .posts-container {
@@ -107,6 +122,7 @@ code {
 }
 
 .bottom-container .social_icon,
+.bottom-container .copyright,
 .bottom-container .menu {
   position: relative;
   display: flex;
@@ -116,6 +132,7 @@ code {
 }
 
 .bottom-container .social_icon li,
+.bottom-container .copyright li,
 .bottom-container .menu li {
   list-style: none;
 }
@@ -144,4 +161,18 @@ code {
 .bottom-container .menu li a:hover {
   opacity: 1;
   color: #fff;
+}
+
+/* Additional CSS */
+
+.excerpt {
+  font-style: italic;
+}
+
+.reactionButton {
+  margin: 0 0.25em 0 0;
+  background: transparent;
+  border: none;
+  color: #000;
+  font-size: 1rem;
 }

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { registerUser } from "../../service/index.service";
 
 function Register() {
-  const [success, setSuccess] = useState("");
   const [user, setUser] = useState({
     username: "",
     email: "",
@@ -23,7 +22,6 @@ function Register() {
     // Handle form submission
     const submit = await registerUser(user);
     console.log(submit);
-    //setSuccess(submit.message);
   };
 
   return (

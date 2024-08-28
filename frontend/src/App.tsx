@@ -4,30 +4,33 @@ import {
   Routes,
   Route
 } from "react-router-dom";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
-import Home from "./pages/Home/Home";
+import AddPostForm from "./features/posts/AddPostForm";
+import EditPostForm from "./features/posts/EditPostForm";
+import SinglePostPage from "./features/posts/SinglePostPage";
+import PostsList from "./features/posts/PostsList";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import Layout from "./components/Layout/Layout";
 
-const Login = lazy(() => import("./pages/Login/Login"));
-const Register = lazy(() => import("./pages/Register/Register"));
 
 function App() {
   return (
-    <div>
-      <Header isLoggedIn={false}/>
-      <div className="main-container">
-        <Suspense fallback={<div>Loading...</div>}>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/home" element={<Home />} />
-            </Routes>
-          </BrowserRouter>
-        </Suspense>  
-      </div>
-      <Footer />
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+
+        <Route index element={<PostsList />} />
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route path="post">
+          <Route index element={<AddPostForm />} />
+          <Route path=":postId" element={<SinglePostPage />} />
+          <Route path="edit/:postId" element={<EditPostForm />} />
+        </Route>
+
+      </Route>
+    </Routes>
   );
 }
 

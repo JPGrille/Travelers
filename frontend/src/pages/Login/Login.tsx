@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../service/index.service";
 
 function Login() {
-  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
   const [user, setUser] = useState({
     username: "",
@@ -29,7 +28,6 @@ function Login() {
     if (response.status === 200) {
       navigate("/home", { state: { user: response.data.user } });
     }
-    //setSuccess(submit.message);
   };
 
   return (

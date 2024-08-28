@@ -11,13 +11,15 @@ function Footer() {
         <li><a href="#">IG</a></li>
       </ul>
       <ul className="menu">
-        <li><a href="#">Home</a></li>
         <li><a href="#">About</a></li>
         <li><a href="#">Services</a></li>
         <li><a href="#">Team</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
-      <p className="copyright">© 2024 Juan Pedro Grille.</p>
+      <ul className="copyright">
+        <li><p>© 2024 Juan Pedro Grille.</p></li>
+      </ul>
+      
     </div>
   );
 }
