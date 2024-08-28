@@ -13,7 +13,7 @@ function Header(props: any) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
+            <Nav.Link href="/user">Users</Nav.Link>
           </Nav>
           <Nav>
             <NavDropdown title="Profile" id="basic-nav-dropdown">
