@@ -7,7 +7,8 @@ import {
 import { sub } from "date-fns";
 import axios from "axios";
 
-const POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
+//const POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
+const POSTS_URL = "http://localhost:4000/api/post";
 
 const postsAdapter = createEntityAdapter({
   sortComparer: (a, b) => b.date.localeCompare(a.date)
@@ -20,6 +21,7 @@ const initialState = postsAdapter.getInitialState({
 
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   const response = await axios.get(POSTS_URL);
+  console.log(response.data);
   return response.data;
 });
 
@@ -30,15 +32,8 @@ export const addNewPost = createAsyncThunk("posts/addNewPost", async (initialPos
 
 export const updatePost = createAsyncThunk("posts/updatePost", async (initialPost) => {
   const { id } = initialPost;
-  // try-catch block only for development/testing with fake API
-  // otherwise, remove try-catch and add updatePost.rejected case
-  try {
-    const response = await axios.put(`${POSTS_URL}/${id}`, initialPost);
-    return response.data;
-  } catch (err) {
-    //return err.message;
-    return initialPost; // only for testing Redux!
-  }
+  const response = await axios.put(`${POSTS_URL}/${id}`, initialPost);
+  return response.data;
 });
 
 export const deletePost = createAsyncThunk("posts/deletePost", async (initialPost) => {
@@ -90,14 +85,6 @@ const postsSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(addNewPost.fulfilled, (state, action) => {
-        // Fix for API post IDs:
-        // Creating sortedPosts & assigning the id 
-        // would be not be needed if the fake API 
-        // returned accurate new post IDs
-
-        action.payload.id = state.ids[state.ids.length - 1] + 1;
-        // End fix for fake API post IDs 
-
         action.payload.userId = Number(action.payload.userId);
         action.payload.date = new Date().toISOString();
         action.payload.reactions = {
@@ -118,6 +105,10 @@ const postsSlice = createSlice({
         }
         action.payload.date = new Date().toISOString();
         postsAdapter.upsertOne(state, action.payload);
+      })
+      .addCase(updatePost.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         if (!action.payload?.id) {

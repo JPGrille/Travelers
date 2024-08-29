@@ -13,10 +13,11 @@ const PostsExcerpt = ({ postId }) => {
   return (
     <article className="post-card">
       <h2 className="post-title">{post.title}</h2>
-      <p className="excerpt">{post.body.substring(0, 75)}...</p>
+      <div className="post-img"><img src={post.img} className="card-img-top" alt=" " /></div>
+      <p className="excerpt">{post.summary.substring(0, 75)}...</p>
       <p className="postCredit">
         <Link to={`post/${post.id}`}>View Post</Link>
-        <PostAuthor userId={post.userId} />
+        <PostAuthor userId={post.created_by} />
         <TimeAgo timestamp={post.date} />
       </p>
       <ReactionButtons post={post} />

@@ -3,12 +3,12 @@ import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import userRouter from "./routes/user.route";
+import postRouter from "./routes/post.route";
 import connectDB from "./config/connectDB";
 import session from "express-session";
 import { pool } from "./config/connectDB";
 const pgSession = require('connect-pg-simple')(session);
 import passport = require("passport");
-
 
 // Initialize dotenv to access environment variables
 dotenv.config();
@@ -59,6 +59,8 @@ app.get("/", (req: Request, res: Response) => {
 
 // User routes
 app.use("/api/user", userRouter);
+// Post routes
+app.use("/api/post", postRouter);
 
 // Unknown route handler
 app.use((req: Request, res: Response) => {

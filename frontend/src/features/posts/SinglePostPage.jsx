@@ -25,10 +25,11 @@ const SinglePostPage = () => {
   return (
     <article>
       <h2>{post.title}</h2>
-      <p>{post.body}</p>
+      <div><img src={post.img} className="card-img-top" alt=" " /></div>
+      <p>{post.summary}</p>
       <p className="postCredit">
         <Link to={`/post/edit/${post.id}`}>Edit Post</Link>
-        <PostAuthor userId={post.userId} />
+        <PostAuthor userId={post.created_by} />
         <TimeAgo timestamp={post.date} />
       </p>
       <ReactionButtons post={post} />

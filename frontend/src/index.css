@@ -23,7 +23,7 @@ code {
 
 .main-container {
   min-height: 60vh;
-  margin: 100px 150px;
+  margin: 50px 150px;
   justify-content: center;
   text-align: center;
 }
@@ -37,16 +37,16 @@ code {
 /* Card Styling */
 
 .posts-container {
+  display: grid;
   margin-top: 50px;
   gap: 2rem;
-  display: grid;
+  justify-content: space-between;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
 }
 
 .post-card {
   flex: 1;
-  max-width: 400px;
   padding: 20px;
   background-color: #f2f2f2;
   border-radius: 5px;
@@ -107,7 +107,6 @@ code {
 /* Footer Styling */
 
 .bottom-container {
-  position:fixed;
   left:0px;
   bottom:0px;
   width: 100%;
