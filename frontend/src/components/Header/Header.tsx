@@ -1,10 +1,28 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { selectCurrentUser } from "../../features/auth/authSlice";
+import axios from "axios";
+import { logoutUser } from "../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
-function Header(props: any) {
+function Header() {
+  const user = useSelector(selectCurrentUser);
+  const dispatch = useDispatch<any>();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      dispatch(logoutUser());
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
+
   return (
     <Navbar expand="lg" fixed="top" bg="primary" data-bs-theme="dark">
       <Container>
@@ -13,21 +31,26 @@ function Header(props: any) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
+            <Nav.Link href="/user">Users</Nav.Link>
           </Nav>
-          <Nav>
-            <NavDropdown title="Profile" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/settings/:id">Settings</NavDropdown.Item>
-              <NavDropdown.Item href="/countries/:id">
+          {!user ?
+            <Nav>
+              <Nav.Link href="/login">Login</Nav.Link>
+            </Nav>
+            :
+            <Nav>
+              <NavDropdown title="Profile" id="basic-nav-dropdown">
+                <NavDropdown.Item href="/settings/:id">Settings</NavDropdown.Item>
+                <NavDropdown.Item href="/countries/:id">
                 My Countries
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/posts/:id">My Posts</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="api/user/logout">
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/posts/:id">My Posts</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={handleLogout}>
                 Logout
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
+                </NavDropdown.Item>
+              </NavDropdown>
+            </Nav>}
         </Navbar.Collapse>
       </Container>
     </Navbar>
