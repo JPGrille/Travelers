@@ -53,7 +53,6 @@ export const register = async (req: Request, res: Response) => {
 
 // Login new user
 export const login = (req: Request, res: Response, next: NextFunction) => {
-  // Validate the request body
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({
@@ -87,8 +86,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
     });
   })(req, res, next);
 
-  // Explicitly return a value after passport.authenticate
-  return; // Ensure all code paths return a value
+  return;
 };
 
 export const logout = (req: Request, res: Response) => {
@@ -104,11 +102,25 @@ export const logout = (req: Request, res: Response) => {
         return res.status(500).json({ message: 'Failed to destroy session', error: err });
       }
 
-      // Optionally clear the cookie
-      res.clearCookie('connect.sid', { path: '/' });
+      // Clear the session cookie with security settings
+      res.clearCookie("connect.sid", {
+        path: "/",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      });
 
       // Send a successful logout response
       return res.status(200).json({ message: 'Logout successful' });
     });
   });
 }
+
+// Check if user is authenticated
+export const checkSession = (req: Request, res: Response) => {
+  if (req.isAuthenticated()) { 
+    return res.status(200).json({ user: req.user });
+  } else {
+    return res.status(401).json({ message: "Not authenticated" });
+  }
+};

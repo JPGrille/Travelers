@@ -14,25 +14,33 @@ import passport = require("passport");
 dotenv.config();
 
 const app = express();
+const corsOptions = {
+  origin:'http://localhost:3000', 
+  credentials:true,
+  optionSuccessStatus:200
+}
 
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors()); // Enable CORS for all requests
+app.use(cors(corsOptions)); // Enable CORS for all requests
 app.use(morgan("dev")); // Log all requests to the console
 
 // Session Setup
 app.use(session({
   secret: process.env.SECRET!,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   store: new pgSession({
     pool : pool,
     tableName : 'user_sessions',
     createTableIfMissing: true
   }),
   cookie: {
-      maxAge: 1000 * 60 * 60 * 24 // Equals 1 day 
+      maxAge: 1000 * 60 * 60 * 24, // Equals 1 day 
+      secure: false, 
+      httpOnly: true,
+      sameSite: "lax",
   }
 }));
 
@@ -43,6 +51,12 @@ app.use(passport.session());
 // Get the PORT from the environment variables
 // Add PORT=3000 to the .env file
 const PORT = process.env.PORT;
+
+app.use((req, res, next) => {
+  console.log('Session ID:', req.sessionID);
+  console.log('Session Data:', req.session);
+  next();
+});
 
 // Basic route
 app.get("/", (req: Request, res: Response) => {

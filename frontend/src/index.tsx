@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { store } from "./app/store";
 import {
   BrowserRouter,
@@ -13,6 +13,7 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { fetchPosts } from "./features/posts/postsSlice";
 import { fetchUsers } from "./features/users/usersSlice";
+import { checkSessionStatus } from "./features/auth/authSlice";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -20,6 +21,7 @@ const root = ReactDOM.createRoot(
 
 store.dispatch(fetchPosts());
 store.dispatch(fetchUsers());
+store.dispatch(checkSessionStatus());
 
 root.render(
   <React.StrictMode>

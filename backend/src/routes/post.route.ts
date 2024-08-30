@@ -1,5 +1,5 @@
 import { Router } from "express";
-
+import { authenticateUser } from "../middlewares/auth";
 import { 
     getAllPosts, 
     getPost, 
@@ -21,12 +21,12 @@ postRouter.get("/:id", getPost);
 postRouter.get("/user/:userId", getAllUserPosts);
 
 // Update an existing post
-postRouter.put("/:id", updatePost);
+postRouter.put("/:id", authenticateUser, updatePost);
 
 // Create a new post
-postRouter.post("/", newPost);
+postRouter.post("/", authenticateUser, newPost);
 
 // Delete an existing post
-postRouter.delete("/:id", deletePost);
+postRouter.delete("/:id", authenticateUser, deletePost);
 
 export default postRouter;
