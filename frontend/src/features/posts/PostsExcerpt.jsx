@@ -5,22 +5,32 @@ import ReactionButtons from "./ReactionButtons";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectPostById } from "./postsSlice";
+import { Card, Button } from "react-bootstrap";
 
 const PostsExcerpt = ({ postId }) => {
-  const post = useSelector(state => selectPostById(state, postId));
+  const post = useSelector((state) => selectPostById(state, postId));
 
   return (
-    <article className="post-card">
-      <h2 className="post-title">{post.title}</h2>
-      <div className="post-img"><img src={post.img} className="card-img-top" alt=" " /></div>
-      <p className="excerpt">{post.summary.substring(0, 75)}...</p>
-      <p className="postCredit">
-        <Link to={`post/${post.id}`}>View Post</Link>
-        <PostAuthor userId={post.created_by} />
-        <TimeAgo timestamp={post.date} />
-      </p>
-      <ReactionButtons post={post} />
-    </article>
+    <Card className="mb-4 shadow-sm">
+      <Card.Img
+        variant="top"
+        src={post.img || "https://via.placeholder.com/150"}
+        alt="Post image"
+        className="card-img-top"
+      />
+      <Card.Body>
+        <Card.Title>{post.title}</Card.Title>
+        <Card.Text>{post.summary.substring(0, 75)}...</Card.Text>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <Link to={`post/${post.id}`}>
+            <Button variant="outline-primary">View Post</Button>
+          </Link>
+          <PostAuthor userId={post.created_by} />
+          <TimeAgo timestamp={post.date} />
+        </div>
+        <ReactionButtons post={post} />
+      </Card.Body>
+    </Card>
   );
 };
 

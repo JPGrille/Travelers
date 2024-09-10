@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import { Form, Button, Container, Row, Col, Alert, Modal, Spinner } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, Alert, Modal } from "react-bootstrap";
 import { selectPostById, updatePost, deletePost } from "./postsSlice";
 import { selectCurrentUser } from "../../features/auth/authSlice";
 
@@ -22,7 +22,6 @@ const EditPostForm = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [modalVariant, setModalVariant] = useState("success");
-  const [isLoading, setIsLoading] = useState(true);
 
   // Set initial values for form fields if post is loaded
   useEffect(() => {
@@ -30,7 +29,6 @@ const EditPostForm = () => {
       setTitle(post.title);
       setContent(post.summary);
       setUrl(post.img);
-      setIsLoading(false);
     }
   }, [post, user]);
 
@@ -91,17 +89,6 @@ const EditPostForm = () => {
       setUpdateRequestStatus("idle");
     }
   };
-
-  // Display a loading spinner while data is loading
-  if (isLoading) {
-    return (
-      <Container className="mt-4">
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      </Container>
-    );
-  }
 
   // Ensure only the owner can edit/delete the post
   if (user?.id !== post.created_by) {
