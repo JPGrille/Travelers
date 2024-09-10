@@ -30,7 +30,7 @@ const AddPostForm = () => {
 
   let canSave = [title, content,  user && user.id].every(Boolean) && addRequestStatus === "idle";
 
-  const onSavePostClicked = () => {
+  const onSavePostClicked = async () => {
     if (canSave) {
       try {
         setAddRequestStatus("pending");
@@ -43,7 +43,7 @@ const AddPostForm = () => {
         dispatch(addNewPost(formData)).unwrap();
         */
 
-        dispatch(addNewPost({ authorId: user.id, title, content, img: url || null })).unwrap();
+        await dispatch(addNewPost({ authorId: user.id, title, content, img: url || null })).unwrap();
 
         setTitle("");
         setContent("");

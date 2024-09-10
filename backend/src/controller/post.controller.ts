@@ -85,14 +85,14 @@ export const updatePost = async (req: Request, res: Response) => {
         return res.status(404).json({ message: "Post not found" });
         }
 
-        /*const { userId } = req.params; //TODO: get the logged in user id from the store
+        const { userId } = req.body;
         // Check if the user is the owner of the post
         if (post.rows[0].created_by !== userId) {
-        return res.status(403).json({ message: "Unauthorized to update this post" });
-        }*/
+          return res.status(403).json({ message: "Unauthorized to update this post" });
+        }
 
         const query = `
-          UPDATE cars
+          UPDATE posts
           SET title = $1, summary = $2, img = $3
           WHERE id = $4
           RETURNING id
@@ -122,12 +122,12 @@ export const deletePost = async (req: Request, res: Response) => {
         return res.status(404).json({ message: "Post not found" });
         }
 
-        /*const { userId } = req.params; //TODO: get the userId from the signed in user (authSlice missing)
+        const { userId } = req.body; 
 
         // Check if the user is the owner of the post
         if (post.rows[0].created_by !== userId) {
             return res.status(403).json({ message: "Unauthorized to delete this post" });
-        }*/
+        }
   
         // Delete the post
         await pool.query("DELETE FROM posts WHERE id = $1", [Number(id)]);

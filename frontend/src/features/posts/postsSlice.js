@@ -97,7 +97,6 @@ const postsSlice = createSlice({
       })
       .addCase(updatePost.fulfilled, (state, action) => {
         if (!action.payload?.id) {
-          console.log("Update could not complete");
           console.log(action.payload);
           return;
         }
@@ -110,7 +109,6 @@ const postsSlice = createSlice({
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         if (!action.payload?.id) {
-          console.log("Delete could not complete");
           console.log(action.payload);
           return;
         }

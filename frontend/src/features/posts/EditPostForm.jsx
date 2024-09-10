@@ -1,118 +1,186 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectPostById, updatePost, deletePost } from "./postsSlice";
 import { useParams, useNavigate } from "react-router-dom";
-
-import { selectAllUsers } from "../users/usersSlice";
+import { Form, Button, Container, Row, Col, Alert, Modal, Spinner } from "react-bootstrap";
+import { selectPostById, updatePost, deletePost } from "./postsSlice";
+import { selectCurrentUser } from "../../features/auth/authSlice";
 
 const EditPostForm = () => {
   const { postId } = useParams();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const post = useSelector((state) => selectPostById(state, Number(postId)));
-  const users = useSelector(selectAllUsers);
+  const user = useSelector(selectCurrentUser);
 
-  const [title, setTitle] = useState(post?.title);
-  const [content, setContent] = useState(post?.body);
-  const [userId, setUserId] = useState(post?.userId);
-  const [requestStatus, setRequestStatus] = useState("idle");
+  // State for managing form inputs and modals
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [url, setUrl] = useState("");
+  //const [image, setImage] = useState(null);
+  const [updateRequestStatus, setUpdateRequestStatus] = useState("idle");
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalVariant, setModalVariant] = useState("success");
+  const [isLoading, setIsLoading] = useState(true);
 
-  const dispatch = useDispatch();
+  // Set initial values for form fields if post is loaded
+  useEffect(() => {
+    if (post && user) {
+      setTitle(post.title);
+      setContent(post.summary);
+      setUrl(post.img);
+      setIsLoading(false);
+    }
+  }, [post, user]);
 
-  if (!post) {
-    return (
-      <section>
-        <h2>Post not found!</h2>
-      </section>
-    );
-  }
-
+  // Handlers for form inputs
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
-  const onAuthorChanged = (e) => setUserId(Number(e.target.value));
+  const onUrlChanged = (e) => setUrl(e.target.value);
+  //const onImageChanged = (e) => setImage(e.target.files[0]);
 
-  const canSave = [title, content, userId].every(Boolean) && requestStatus === "idle";
+  // Determine if form can be submitted
+  const canSave = [title, content].every(Boolean) && updateRequestStatus === "idle";
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   const onSavePostClicked = () => {
     if (canSave) {
       try {
-        setRequestStatus("pending");
-        dispatch(updatePost({ id: post.id, title, body: content, userId, reactions: post.reactions })).unwrap();
+        setUpdateRequestStatus("pending");
 
-        setTitle("");
-        setContent("");
-        setUserId("");
-        navigate(`/post/${postId}`);
+        /* TODO: Handle image upload
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("body", content);
+        if (image) formData.append("image", image);
+        dispatch(updatePost({ id: post.id, formData })).unwrap();
+        */
+        
+        dispatch(updatePost({ id: post.id, title, summary: content, img: url || null})).unwrap();
+
+        setModalMessage("Post updated successfully!");
+        setModalVariant("success");
+        setShowModal(true);
       } catch (err) {
-        console.error("Failed to save the post", err);
+        console.error("Failed to update the post: ", err);
+        setModalMessage("Failed to update the post. Please try again.");
+        setModalVariant("danger");
+        setShowModal(true);
       } finally {
-        setRequestStatus("idle");
+        setUpdateRequestStatus("idle");
       }
     }
   };
 
-  const usersOptions = users.map((user) => (
-    <option
-      key={user.id}
-      value={user.id}
-    >{user.name}</option>
-  ));
-
   const onDeletePostClicked = () => {
     try {
-      setRequestStatus("pending");
+      setUpdateRequestStatus("pending");
       dispatch(deletePost({ id: post.id })).unwrap();
 
-      setTitle("");
-      setContent("");
-      setUserId("");
       navigate("/");
     } catch (err) {
-      console.error("Failed to delete the post", err);
+      console.error("Failed to delete the post: ", err);
+      setModalMessage("Failed to delete the post. Please try again.");
+      setModalVariant("danger");
+      setShowModal(true);
     } finally {
-      setRequestStatus("idle");
+      setUpdateRequestStatus("idle");
     }
   };
 
+  // Display a loading spinner while data is loading
+  if (isLoading) {
+    return (
+      <Container className="mt-4">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </Container>
+    );
+  }
+
+  // Ensure only the owner can edit/delete the post
+  if (user?.id !== post.created_by) {
+    return (
+      <Container className="mt-4">
+        <Alert variant="danger">You are not authorized to edit this post.</Alert>
+      </Container>
+    );
+  }
+
   return (
-    <section>
+    <Container className="mt-4">
       <h2>Edit Post</h2>
-      <form>
-        <label htmlFor="postTitle">Post Title:</label>
-        <input
-          type="text"
-          id="postTitle"
-          name="postTitle"
-          value={title}
-          onChange={onTitleChanged}
-        />
-        <label htmlFor="postAuthor">Author:</label>
-        <select id="postAuthor" value={userId} onChange={onAuthorChanged}>
-          <option value=""></option>
-          {usersOptions}
-        </select>
-        <label htmlFor="postContent">Content:</label>
-        <textarea
-          id="postContent"
-          name="postContent"
-          value={content}
-          onChange={onContentChanged}
-        />
-        <button
-          type="button"
-          onClick={onSavePostClicked}
-          disabled={!canSave}
-        >
-                    Save Post
-        </button>
-        <button className="deleteButton"
-          type="button"
-          onClick={onDeletePostClicked}
-        >
-                    Delete Post
-        </button>
-      </form>
-    </section>
+      <Form>
+        {/* Post Title */}
+        <Form.Group className="mb-3" controlId="postTitle">
+          <Form.Label>Post Title</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter title"
+            value={title}
+            onChange={onTitleChanged}
+          />
+        </Form.Group>
+
+        {/* Post Content */}
+        <Form.Group className="mb-3" controlId="postContent">
+          <Form.Label>Content</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={5}
+            value={content}
+            onChange={onContentChanged}
+          />
+        </Form.Group>
+
+        {/* Image Upload */}
+        <Form.Group className="mb-3" controlId="postImage">
+          <Form.Label>Upload Image</Form.Label>
+          {/*<Form.Control type="file" onChange={onImageChanged} /> TODO: Add image upload logic to AWS S3 or another cloud solution */}
+          <Form.Control
+            type="text"
+            placeholder="Enter image url"
+            value={url}
+            onChange={onUrlChanged}
+          />
+        </Form.Group>
+
+        {/* Action Buttons */}
+        <Row className="mt-4">
+          <Col>
+            <Button
+              variant="primary"
+              type="button"
+              onClick={onSavePostClicked}
+              disabled={!canSave}
+            >
+              Save Post
+            </Button>{" "}
+            <Button variant="danger" type="button" onClick={onDeletePostClicked}>
+              Delete Post
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+
+      {/* Modal for Success/Error Messages */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{modalVariant === "success" ? "Success" : "Error"}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{modalMessage}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Container>
   );
 };
 
