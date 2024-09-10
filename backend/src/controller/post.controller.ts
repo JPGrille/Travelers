@@ -13,7 +13,7 @@ export const getAllPosts = async (req: Request, res: Response) => {
       console.error("Error fetching posts:", error);
       return res.status(500).json({ message: "Internal Server Error" });
     }
-  };
+};
   
 // Get a single post by ID
 export const getPost = async (req: Request, res: Response) => {
@@ -50,18 +50,17 @@ export const getAllUserPosts = async (req: Request, res: Response) => {
 // Create a new post
 export const newPost = async (req: Request, res: Response) => {
     try {
-      const { title, content, img, created_by } = req.body;
-      //TODO: get the logged in user id from the store
+      const { title, content, img, authorId } = req.body;
   
       // Check if all required fields are provided
-      if (!title || !content || !img || !created_by) {
+      if (!title || !content || !img || !authorId) {
         return res.status(400).json({ message: "All fields are required" });
       }
   
       // Insert new post into the database
       const newPost = await pool.query(
         "INSERT INTO posts (title, summary, date, img, created_by) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-        [title, content, new Date(), img, created_by]
+        [title, content, new Date(), img, authorId]
       );
   
       return res.status(201).json({

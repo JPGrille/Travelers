@@ -35,6 +35,7 @@ function App() {
         <Route path="user">
           <Route index element={<UsersList />} />
           <Route path=":userId" element={<UserPage />} />
+          <Route path="posts/:userId" element={<PostsList />} />
         </Route>
 
         {/* Catch all - replace with 404 component if you want */}

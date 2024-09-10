@@ -124,3 +124,17 @@ export const checkSession = (req: Request, res: Response) => {
     return res.status(401).json({ message: "Not authenticated" });
   }
 };
+
+// Get all users
+export const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await pool.query("SELECT id, name, email FROM users");
+    if (users.rows.length === 0) {
+      return res.status(404).json({ message: "No users found" });
+    }
+    return res.status(200).json(users.rows);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
