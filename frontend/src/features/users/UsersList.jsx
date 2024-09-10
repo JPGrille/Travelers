@@ -1,22 +1,21 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { selectAllUsers } from "./usersSlice";
-import { Link } from "react-router-dom";
+import ListGroup from "react-bootstrap/ListGroup";
 
 const UsersList = () => {
   const users = useSelector(selectAllUsers);
 
   const renderedUsers = users.map(user => (
-    <li key={user.id}>
-      <Link to={`/user/${user.id}`}>{user.name}</Link>
-    </li>
+    <ListGroup.Item key={user.id} action href={`/user/${user.id}`}>
+      {user.name}
+    </ListGroup.Item>
   ));
 
   return (
     <section>
       <h2>Users</h2>
-
-      <ul>{renderedUsers}</ul>
+      <ListGroup>{renderedUsers}</ListGroup>
     </section>
   );
 };

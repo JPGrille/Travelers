@@ -7,7 +7,6 @@ import {
 import { sub } from "date-fns";
 import axios from "axios";
 
-//const POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
 const POSTS_URL = "http://localhost:4000/api/post";
 
 const postsAdapter = createEntityAdapter({
@@ -21,25 +20,24 @@ const initialState = postsAdapter.getInitialState({
 
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   const response = await axios.get(POSTS_URL);
-  console.log(response.data);
   return response.data;
 });
 
 export const addNewPost = createAsyncThunk("posts/addNewPost", async (initialPost) => {
-  const response = await axios.post(POSTS_URL, initialPost);
+  const response = await axios.post(POSTS_URL, initialPost, { withCredentials: true });
   return response.data;
 });
 
 export const updatePost = createAsyncThunk("posts/updatePost", async (initialPost) => {
   const { id } = initialPost;
-  const response = await axios.put(`${POSTS_URL}/${id}`, initialPost);
+  const response = await axios.put(`${POSTS_URL}/${id}`, initialPost, { withCredentials: true });
   return response.data;
 });
 
 export const deletePost = createAsyncThunk("posts/deletePost", async (initialPost) => {
   const { id } = initialPost;
 
-  const response = await axios.delete(`${POSTS_URL}/${id}`);
+  const response = await axios.delete(`${POSTS_URL}/${id}`, { withCredentials: true });
   if (response?.status === 200) return initialPost;
   return `${response?.status}: ${response?.statusText}`;
 });
@@ -136,7 +134,7 @@ export const getPostsError = (state) => state.posts.error;
 
 export const selectPostsByUser = createSelector(
   [selectAllPosts, (state, userId) => userId],
-  (posts, userId) => posts.filter(post => post.userId === userId)
+  (posts, userId) => posts.filter(post => post.created_by === userId)
 );
 
 export const { reactionAdded } = postsSlice.actions;

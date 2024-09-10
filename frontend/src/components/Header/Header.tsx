@@ -5,7 +5,6 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { selectCurrentUser } from "../../features/auth/authSlice";
-import axios from "axios";
 import { logoutUser } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -30,8 +29,8 @@ function Header() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/user">Users</Nav.Link>
+            {user && <Nav.Link href="/post">New Post +</Nav.Link>}
           </Nav>
           {!user ?
             <Nav>
@@ -40,11 +39,11 @@ function Header() {
             :
             <Nav>
               <NavDropdown title="Profile" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/settings/:id">Settings</NavDropdown.Item>
+                <NavDropdown.Item href={`/user/${user.id}`}>Settings</NavDropdown.Item>
                 <NavDropdown.Item href="/countries/:id">
                 My Countries
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/posts/:id">My Posts</NavDropdown.Item>
+                <NavDropdown.Item href={`/user/posts/${user.id}`}>My Posts</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={handleLogout}>
                 Logout

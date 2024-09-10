@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { register, login, logout, checkSession } from "../controller/user.controller";
+import { register, login, logout, checkSession, getAllUsers } from "../controller/user.controller";
 
 const userRouter = Router();
 
@@ -15,5 +15,8 @@ userRouter.post("/logout", logout);
 
 // Check session status
 userRouter.get("/status", checkSession);
+
+// Get all users
+userRouter.get("/", getAllUsers);
 
 export default userRouter;
