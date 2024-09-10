@@ -14,6 +14,8 @@ import Register from "./pages/Register/Register";
 import Layout from "./components/Layout/Layout";
 import UserPage from "./features/users/UserPage";
 import UsersList from "./features/users/UsersList";
+import About from "./pages/About/About";
+import Team from "./pages/Team/Team";
 
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
 
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="about" element={<About />} />
+        <Route path="team" element={<Team />} />
 
         <Route path="post">
           <Route index element={<AddPostForm />} />
