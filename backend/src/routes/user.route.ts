@@ -1,6 +1,7 @@
 import { Router } from "express";
 
-import { register, login, logout, checkSession, getAllUsers } from "../controller/user.controller";
+import { register, login, logout, checkSession, getAllUsers, updateUser } from "../controller/user.controller";
+import { authenticateUser } from "../middlewares/auth";
 
 const userRouter = Router();
 
@@ -18,5 +19,8 @@ userRouter.get("/status", checkSession);
 
 // Get all users
 userRouter.get("/", getAllUsers);
+
+// Update a specific user
+userRouter.put("/:id", authenticateUser, updateUser);
 
 export default userRouter;

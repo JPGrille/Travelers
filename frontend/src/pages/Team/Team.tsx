@@ -18,7 +18,6 @@ function Team() {
       linkedin: "https://www.linkedin.com/in/janedoe",
       twitter: "https://twitter.com/janedoe",
     },
-    // Add more team members here
   ];
 
   return (

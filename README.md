@@ -5,10 +5,12 @@ This project is a full-stack web application that allows users to register an ac
 
 ## Features
 - User registration with email and password
+- Session cookie management and persisted on the DB
 - Protected routes for authenticated users
-- Integration with a PostgreSQL database for storing user data
+- Integration with a PostgreSQL database for storing page data
 - CRUD operations to manage posts on the website
-- World map to show the visited countries for each user
+- Redux Toolkit usage
+- React Bootstrap used throughout the entire webpage to handle responsiveness as well as proper styling
 
 ## Getting this App up and running
 1. Clone this repository

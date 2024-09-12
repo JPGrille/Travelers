@@ -138,3 +138,64 @@ export const getAllUsers = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const { userId, name, email, password } = req.body;
+
+    if (!userId || (!name && !email && !password)) {
+      return res.status(400).json({
+        message: "Please provide user ID and at least one field to update (name, email, or password).",
+      });
+    }
+
+    // Check if the user exists
+    const existingUser = await pool.query("SELECT * FROM users WHERE id = $1", [userId]);
+    if (existingUser.rows.length === 0) {
+      return res.status(404).json({
+        message: "User not found.",
+      });
+    }
+
+    // Check if email is being changed and if it already exists
+    if (email && email !== existingUser.rows[0].email) {
+      const emailCheck = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+      if (emailCheck.rows.length > 0) {
+        return res.status(400).json({
+          message: "User with this email already exists",
+        });
+      }
+    }
+
+    let updatedUser;
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      const query = `
+        UPDATE users
+        SET name = $1, email = $2, password = $3
+        WHERE id = $4
+        RETURNING id
+      `;
+      updatedUser = await pool.query(query, [name, email, hashedPassword, userId]);
+    } else {
+      const query = `
+        UPDATE users
+        SET name = $1, email = $2
+        WHERE id = $3
+        RETURNING id
+      `;
+      updatedUser = await pool.query(query, [name, email, userId]);
+    }
+
+    return res.status(200).json({
+      message: "User updated successfully",
+      userId: updatedUser.rows[0],
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};

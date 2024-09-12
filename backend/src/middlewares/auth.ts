@@ -13,7 +13,6 @@ export const authenticateUser = (req: Request, res: Response, next: NextFunction
   // Check if the session exists and if the user is logged in
   if (req.session && req.session.passport && req.session.passport.user) {
     // Attach the user to the request object for further use
-    console.log("User: " + req.session.passport.user);
     req.body.userId = req.session.passport.user.id;
     return next();
   } else {

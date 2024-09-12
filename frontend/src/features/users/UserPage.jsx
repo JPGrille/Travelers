@@ -1,23 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUserById } from "../users/usersSlice";
+import { selectUserById, updateUser } from "../users/usersSlice";
 import { selectPostsByUser } from "../posts/postsSlice";
 import { useParams } from "react-router-dom";
-import { Form, Container, Row, Col, Button, Card, ListGroup } from "react-bootstrap";
+import { Form, Container, Row, Col, Button, Modal } from "react-bootstrap"; // Added Modal
 
 const UserPage = () => {
   const { userId } = useParams();
-  const user = useSelector(state => selectUserById(state, Number(userId)));
+  const user = useSelector((state) => selectUserById(state, Number(userId)));
   const dispatch = useDispatch();
 
-  const postsForUser = useSelector(state => selectPostsByUser(state, Number(userId)));
+  // const postsForUser = useSelector(state => selectPostsByUser(state, Number(userId)));
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    profilePicture: null
+    profilePicture: null,
   });
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // States for Modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -25,8 +33,11 @@ const UserPage = () => {
         name: user.name,
         email: user.email,
         password: "",
-        profilePicture: null
+        profilePicture: null,
       });
+      setName(user.name);
+      setEmail(user.email);
+      setPassword("");
     }
   }, [user]);
 
@@ -35,31 +46,43 @@ const UserPage = () => {
     const { name, value, files } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: files ? files[0] : value
+      [name]: files ? files[0] : value,
     }));
   };
+
+  // Handlers for form inputs
+  const onNameChanged = (e) => setName(e.target.value);
+  const onEmailChanged = (e) => setEmail(e.target.value);
+  const onPasswrodChanged = (e) => setPassword(e.target.value);
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedData = new FormData();
-
-    // Append form data
-    updatedData.append("name", formData.name);
-    updatedData.append("email", formData.email);
-    if (formData.password) updatedData.append("password", formData.password); // Only append password if it's provided
-    if (formData.profilePicture) updatedData.append("profilePicture", formData.profilePicture);
+    // const updatedData = new FormData();
+    // updatedData.append("name", name);
+    // updatedData.append("email", email);
+    // if (password) updatedData.append("password", password);
+    // if (profilePicture) updatedData.append("profilePicture", formData.profilePicture);
 
     try {
-      // Make a request to the backend to update the user
-      //const response = await axios.put(`/api/user/${user.id}`, updatedData, { withCredentials: true });
-      //dispatch(updateUser(response.data.user)); // Dispatch the Redux action to update the user in the store
-      alert("Profile updated successfully");
+      // const response = await axios.put(`/api/user/${user.id}, updatedData, { withCredentials: true });
+      dispatch(updateUser({ userId, name, email, password: password || null }))
+        .unwrap()
+        .then(() => {
+          setModalMessage("Profile updated successfully");
+          setIsError(false);
+          setShowModal(true);
+          setPassword("");
+        });
     } catch (error) {
       console.error("Error updating profile", error);
-      alert("Failed to update profile");
+      setModalMessage("Failed to update profile");
+      setIsError(true);
+      setShowModal(true);
     }
   };
+
+  const handleCloseModal = () => setShowModal(false);
 
   return (
     <Container>
@@ -72,8 +95,8 @@ const UserPage = () => {
               <Form.Control
                 type="text"
                 name="name"
-                value={formData.name}
-                onChange={handleChange}
+                value={name}
+                onChange={onNameChanged}
               />
             </Form.Group>
 
@@ -82,8 +105,8 @@ const UserPage = () => {
               <Form.Control
                 type="email"
                 name="email"
-                value={formData.email}
-                onChange={handleChange}
+                value={email}
+                onChange={onEmailChanged}
               />
             </Form.Group>
 
@@ -93,7 +116,7 @@ const UserPage = () => {
                 type="password"
                 name="password"
                 placeholder="Leave blank to keep unchanged"
-                onChange={handleChange}
+                onChange={onPasswrodChanged}
               />
             </Form.Group>
 
@@ -112,6 +135,19 @@ const UserPage = () => {
           </Form>
         </Col>
       </Row>
+
+      {/* Modal for success/failure messages */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{isError ? "Error" : "Success"}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{modalMessage}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };
