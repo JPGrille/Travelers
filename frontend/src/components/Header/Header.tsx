@@ -40,7 +40,7 @@ function Header() {
             <Nav>
               <NavDropdown title="Profile" id="basic-nav-dropdown">
                 <NavDropdown.Item href={`/user/${user.id}`}>Settings</NavDropdown.Item>
-                <NavDropdown.Item href="/countries/:id">
+                <NavDropdown.Item href={`user/countries/${user.id}`}>
                 My Countries
                 </NavDropdown.Item>
                 <NavDropdown.Item href={`/user/posts/${user.id}`}>My Posts</NavDropdown.Item>
