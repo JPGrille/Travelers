@@ -23,17 +23,16 @@ export const addNewCountry = async (req: Request, res: Response) => {
     const { input, userId } = req.body;
     try {
         const result = await pool.query(
-            "SELECT country_code FROM countries WHERE LOWER(country_name) LIKE '%' || $1 || '%';",
+            "SELECT code FROM country WHERE LOWER(name) LIKE '%' || $1 || '%';",
             [input.toLowerCase()]
         );
-
         const data = result.rows[0];
-        const countryCode = data.country_code;
+        const countryCode = data.code;
         await pool.query(
             "INSERT INTO visited_countries (country_code, user_id) VALUES ($1, $2)",
             [countryCode, userId]
         );
-        return res.status(201).json({ message: "Country added successfully" });
+        return res.status(201).json({ message: "Country added successfully", countryCode });
     } catch (err) {
         return res.status(500).json({ message: "Internal Server Error" });
     }

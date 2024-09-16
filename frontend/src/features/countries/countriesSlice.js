@@ -22,7 +22,7 @@ export const fetchCountries = createAsyncThunk("countries/fetchCountries", async
 });
 
 export const addNewCountry = createAsyncThunk("countries/addNewCountry", async ({ userId, input }) => {
-  const response = await axios.post(COUNTRIES_URL, { userId, input }, { withCredentials: true });
+  const response = await axios.post(`${COUNTRIES_URL}/newCountry`, { userId, input }, { withCredentials: true });
   return response.data;
 });
 
