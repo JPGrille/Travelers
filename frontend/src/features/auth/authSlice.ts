@@ -5,7 +5,7 @@ const API_URL = "http://localhost:4000/api/user";
 
 const initialState = {
   user: null,
-  status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+  status: "idle",
   error: null,
 };
 

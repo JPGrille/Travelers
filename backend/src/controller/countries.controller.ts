@@ -6,13 +6,13 @@ export const getVisitedCountries = async (req: Request, res: Response) => {
     const { userId } = req.params;
     try {
         const countries = await pool.query(
-            "SELECT country_code FROM visited_countries JOIN users ON users.id = user_id WHERE user_id = $1;",
+            "SELECT visited_countries.id, country_code, user_id FROM visited_countries JOIN users ON users.id = user_id WHERE user_id = $1;",
             [Number(userId)]
         );
-        if (countries.rows.length === 0) {
-        return res.status(404).json({ message: "No visited countries found for this user" });
-      }
-      return res.status(200).json(countries.rows);
+        if (countries.rows.length === 0) {  
+            return res.status(404).json({ message: "No visited countries found for this user" });
+        }
+        return res.status(200).json(countries.rows);
     } catch (error) {
         return res.status(500).json({ message: "Internal Server Error" });
     }
@@ -20,8 +20,7 @@ export const getVisitedCountries = async (req: Request, res: Response) => {
 
 // Add new visited country
 export const addNewCountry = async (req: Request, res: Response) => {
-    const input = req.body["country"];
-    const { userId } = req.params;
+    const { input, userId } = req.body;
     try {
         const result = await pool.query(
             "SELECT country_code FROM countries WHERE LOWER(country_name) LIKE '%' || $1 || '%';",

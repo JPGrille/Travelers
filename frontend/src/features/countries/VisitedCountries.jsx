@@ -1,44 +1,37 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Container, Row } from "react-bootstrap";
 import WorldMap from "./WorldMap";
-import axios from "axios";
 import { Form, Button } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { addNewCountry, fetchCountries, selectAllCountries } from "./countriesSlice";
 
 function VisitedCountries() {
-  const [countries, setCountries] = useState([]);
+  const { userId } = useParams();
+  const dispatch = useDispatch();
   const [countryName, setCountryName] = useState("");
 
+  // Fetch visited Countries
   useEffect(() => {
-    fetchVisitedCountries();
+    dispatch(fetchCountries(userId)).unwrap();
   }, []);
-
-  async function fetchVisitedCountries() {
-    try {
-      const result = await axios.get("http://localhost:4000/api/countries/3");
-      console.log(result);
-
-      if (result && result.data) {
-        setCountries(result.data);
-      }
-    } catch (error) {
-      console.error("Error fetching countries:", error);
-    }
-  }
+  const visitedCountries = useSelector(selectAllCountries);
 
   useEffect(() => {
-    if (countries.length > 0) {
-      countries.forEach((row) => {
+    if (visitedCountries.length > 0) {
+      visitedCountries.forEach((row) => {
         const element = document.getElementById(row["country_code"]);
         if (element) {
           element.style.fill = "#0D6EFD";
         }
       });
     }
-  }, [countries]);
+  }, [visitedCountries]);
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.preventDefault();
     try {
-      //const result = await axios.get("http://localhost:4000/api/countries/newCountry");
+      dispatch(addNewCountry({ userId, input: countryName })).unwrap();
     } catch (error) {
       console.log(error);
     }

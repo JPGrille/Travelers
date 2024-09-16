@@ -30,7 +30,7 @@ function Header() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/user">Users</Nav.Link>
-            {user && <Nav.Link href="/post">New Post +</Nav.Link>}
+            {user && <Nav.Link href="/post">New Post</Nav.Link>}
           </Nav>
           {!user ?
             <Nav>
