@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  BrowserRouter,
   Routes,
   Route,
   Navigate
@@ -16,6 +15,7 @@ import UserPage from "./features/users/UserPage";
 import UsersList from "./features/users/UsersList";
 import About from "./pages/About/About";
 import Team from "./pages/Team/Team";
+import VisitedCountries from "./features/countries/VisitedCountries";
 
 
 function App() {
@@ -40,6 +40,7 @@ function App() {
           <Route index element={<UsersList />} />
           <Route path=":userId" element={<UserPage />} />
           <Route path="posts/:userId" element={<PostsList />} />
+          <Route path="countries/:userId" element={<VisitedCountries />} />
         </Route>
 
         {/* Catch all - replace with 404 component if you want */}

@@ -9,6 +9,7 @@ import session from "express-session";
 import { pool } from "./config/connectDB";
 const pgSession = require('connect-pg-simple')(session);
 import passport = require("passport");
+import countriesRouter from "./routes/countries.route";
 
 // Initialize dotenv to access environment variables
 dotenv.config();
@@ -75,6 +76,8 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/user", userRouter);
 // Post routes
 app.use("/api/post", postRouter);
+// Post routes
+app.use("/api/countries", countriesRouter);
 
 // Unknown route handler
 app.use((req: Request, res: Response) => {

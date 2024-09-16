@@ -30,7 +30,7 @@ function Header() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/user">Users</Nav.Link>
-            {user && <Nav.Link href="/post">New Post +</Nav.Link>}
+            {user && <Nav.Link href="/post">New Post</Nav.Link>}
           </Nav>
           {!user ?
             <Nav>
@@ -40,7 +40,7 @@ function Header() {
             <Nav>
               <NavDropdown title="Profile" id="basic-nav-dropdown">
                 <NavDropdown.Item href={`/user/${user.id}`}>Settings</NavDropdown.Item>
-                <NavDropdown.Item href="/countries/:id">
+                <NavDropdown.Item href={`user/countries/${user.id}`}>
                 My Countries
                 </NavDropdown.Item>
                 <NavDropdown.Item href={`/user/posts/${user.id}`}>My Posts</NavDropdown.Item>
