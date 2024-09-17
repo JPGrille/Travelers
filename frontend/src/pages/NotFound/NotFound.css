@@ -1,0 +1,28 @@
+.not-found-page h1 {
+    font-size: 6rem;
+    color: #0d6efd;
+}
+
+.not-found-page h2 {
+    font-size: 2rem;
+}
+
+.not-found-page p {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+@media (max-width: 767.98px) {
+    .not-found-page h1 {
+        font-size: 4rem;
+    }
+
+    .not-found-page h2 {
+        font-size: 1.5rem;
+    }
+
+    .not-found-page p {
+        font-size: 1rem;
+    }
+}
+  

@@ -1,8 +1,7 @@
 import React from "react";
 import {
   Routes,
-  Route,
-  Navigate
+  Route
 } from "react-router-dom";
 import AddPostForm from "./features/posts/AddPostForm";
 import EditPostForm from "./features/posts/EditPostForm";
@@ -16,6 +15,7 @@ import UsersList from "./features/users/UsersList";
 import About from "./pages/About/About";
 import Team from "./pages/Team/Team";
 import VisitedCountries from "./features/countries/VisitedCountries";
+import NotFound from "./pages/NotFound/NotFound";
 
 
 function App() {
@@ -43,8 +43,7 @@ function App() {
           <Route path="countries/:userId" element={<VisitedCountries />} />
         </Route>
 
-        {/* Catch all - replace with 404 component if you want */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
 
       </Route>
     </Routes>
