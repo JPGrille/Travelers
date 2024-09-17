@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  Routes,
-  Route
-} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import AddPostForm from "./features/posts/AddPostForm";
 import EditPostForm from "./features/posts/EditPostForm";
 import SinglePostPage from "./features/posts/SinglePostPage";
@@ -16,6 +13,7 @@ import About from "./pages/About/About";
 import Team from "./pages/Team/Team";
 import VisitedCountries from "./features/countries/VisitedCountries";
 import NotFound from "./pages/NotFound/NotFound";
+import UserProfile from "./features/users/UserProfile";
 
 
 function App() {
@@ -39,8 +37,9 @@ function App() {
         <Route path="user">
           <Route index element={<UsersList />} />
           <Route path=":userId" element={<UserPage />} />
+          <Route path="profile/:userId" element={<UserProfile />} />
           <Route path="posts/:userId" element={<PostsList />} />
-          <Route path="countries/:userId" element={<VisitedCountries />} />
+          <Route path="countries/:userId" element={<VisitedCountries showForm={true} />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

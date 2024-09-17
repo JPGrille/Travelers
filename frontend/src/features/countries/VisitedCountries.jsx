@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addNewCountry, fetchCountries, selectAllCountries } from "./countriesSlice";
 import WorldMap from "./WorldMap";
 
-function VisitedCountries() {
+function VisitedCountries(props) {
   const { userId } = useParams();
   const dispatch = useDispatch();
   const [countryName, setCountryName] = useState("");
@@ -63,23 +63,25 @@ function VisitedCountries() {
 
   return (
     <Container>
-      <Row>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="formName" className="mb-3">
-            <Form.Control
-              type="text"
-              placeholder="Enter country name"
-              name="countryName"
-              value={countryName}
-              onChange={onCountryChanged}
-            />
-          </Form.Group>
+      {props.showForm &&
+        <Row>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="formName" className="mb-3">
+              <Form.Control
+                type="text"
+                placeholder="Enter country name"
+                name="countryName"
+                value={countryName}
+                onChange={onCountryChanged}
+              />
+            </Form.Group>
 
-          <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit">
             Add New
-          </Button>
-        </Form>
-      </Row>
+            </Button>
+          </Form>
+        </Row>
+      }
       <Row>
         <WorldMap />
       </Row>

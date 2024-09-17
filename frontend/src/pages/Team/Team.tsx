@@ -8,8 +8,8 @@ function Team() {
       name: "Juan Pedro Grille",
       role: "Co-Founder",
       imgSrc: "/images/profile-picture-placeholder.jpg",
-      linkedin: "https://www.linkedin.com/in/juanpedrogrille",
-      twitter: "https://twitter.com/juanpedrogrille",
+      linkedin: "https://www.linkedin.com/in/juan-pedro-grille-nervi-8ba891144",
+      twitter: "https://twitter.com/",
     },
     {
       name: "Jane Doe",

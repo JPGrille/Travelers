@@ -7,7 +7,7 @@ const UsersList = () => {
   const users = useSelector(selectAllUsers);
 
   const renderedUsers = users.map(user => (
-    <ListGroup.Item key={user.id} action href={`/user/${user.id}`}>
+    <ListGroup.Item key={user.id} action href={`/user/profile/${user.id}`}>
       {user.name}
     </ListGroup.Item>
   ));
